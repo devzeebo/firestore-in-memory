@@ -1,4 +1,4 @@
-{
+module.exports = {
   "presets": [
     [
       "@babel/preset-env",
@@ -6,12 +6,10 @@
         "targets": {
           "node": true
         },
-        "useBuiltIns": "usage",
-        "corejs": 3.3
-      }
-    ]
+      },
+    ],
   ],
   "plugins": [
     "@babel/plugin-proposal-class-properties"
   ]
-}
+};

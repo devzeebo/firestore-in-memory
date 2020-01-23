@@ -1,0 +1,8 @@
+.babelrc.js
+.eslint*
+.gitignore
+*.test.js
+.git/
+.vscode/
+coverage/
+.github/

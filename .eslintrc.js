@@ -4,6 +4,7 @@ module.exports = {
   parser: 'babel-eslint',
   env: {
     node: true,
+    jest: true,
   },
   rules: {
     'import/default': ['error'],
