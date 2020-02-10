@@ -25,5 +25,6 @@ module.exports = {
     'radix': 'off',
     'class-methods-use-this': 'off',
     'no-mixed-operators': 'off',
+    'no-underscore-dangle': 'off',
   }
 };
