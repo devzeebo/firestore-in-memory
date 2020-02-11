@@ -3,7 +3,7 @@ import test from 'jest-gwt';
 
 import set from './set';
 
-describe('firestore interface::ref', () => {
+describe('firestore interface::set', () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
@@ -46,6 +46,19 @@ describe('firestore interface::ref', () => {
       document_data_is_MERGED,
     },
   });
+
+  test('merge true with no data', {
+    given: {
+      mock_document_WITHOUT_data,
+      data,
+    },
+    when: {
+      setting_ref_with_MERGE_TRUE,
+    },
+    then: {
+      document_data_is_OVERWRITTEN,
+    },
+  });
 });
 
 function mock_document() {
@@ -60,6 +73,15 @@ function mock_document() {
         name: 'Maoser',
         sound: 'meow',
       },
+    },
+  };
+}
+function mock_document_WITHOUT_data() {
+  this.mock_set_document = jest.fn();
+  this.document = {
+    path: '123-abc/nested/456-def',
+    database: {
+      setDocument: this.mock_set_document,
     },
   };
 }
