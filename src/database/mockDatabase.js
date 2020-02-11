@@ -5,14 +5,29 @@ const createMockDb = () => {
   const mockDb = createMockFirestoreDocument('', null, { exists: true });
 
   assign(mockDb, {
-    setTransactionMock: (mock) => (mockDb.transactionMock = mock),
     runTransaction: async (func) => func(mockDb.transaction),
     reset: () => {
       mockDb.children = {};
       mockDb.transaction = {
-        get: async (ref) => ref.get(),
-        set: async (ref, data, opts) => ref.set(data, opts),
-        update: async (ref, data) => ref.update(data),
+        log: [],
+        async get(ref) {
+          mockDb.transaction.log.push({
+            op: 'get', path: ref.path,
+          });
+          return ref.get();
+        },
+        async set(ref, data, opts) {
+          mockDb.transaction.log.push({
+            op: 'set', path: ref.path, data, opts,
+          });
+          return ref.set(data, opts);
+        },
+        async update(ref, data) {
+          mockDb.transaction.log.push({
+            op: 'update', path: ref.path, data,
+          });
+          return ref.update(data);
+        },
       };
     },
   });
