@@ -24,6 +24,19 @@ describe('create mock firestore document', () => {
     },
   });
 
+  test('path is parent path/id', {
+    given: {
+      id,
+      document_WITH_PARENT,
+    },
+    when: {
+      creating_mock_document,
+    },
+    then: {
+      path_is_PARENT_PATH_slash_ID,
+    },
+  });
+
   test('mock document has getDocument', {
     given: {
       mock_getDocument_partial,
@@ -61,8 +74,16 @@ describe('create mock firestore document', () => {
   });
 });
 
+function id() {
+  this.name = 'document';
+}
 function document_with_NO_PARENT() {
   this.parent = null;
+}
+function document_WITH_PARENT() {
+  this.parent = {
+    path: 'path-to-parent/subcollection',
+  };
 }
 function mock_getDocument_partial() {
   getDocument.mockImplementationOnce((bound_doc, bound_creator) => {
@@ -95,4 +116,7 @@ function path_is_EMPTY_STRING() {
 function mock_document_is_bound() {
   expect(this.bound_doc).toBe(this.result_mock_document);
   expect(this.bound_creator).toBe(createMockFirestoreDocument);
+}
+function path_is_PARENT_PATH_slash_ID() {
+  expect(this.result_mock_document.path).toBe('path-to-parent/subcollection/document');
 }

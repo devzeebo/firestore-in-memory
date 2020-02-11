@@ -1,19 +1,20 @@
 import curry from 'lodash/fp/curry';
 import splitNextDocRef from './splitNextDocRef';
 import getOrCreateChild from './getChild';
+import cloneForSnapshot from './cloneForSnapshot';
 
-const getDocument = (fsDocument, createMockFirestoreDocument, ref, mock = { data: undefined }) => {
+const getDocument = (fsDocument, createMockFirestoreDocument, ref, mockData = undefined) => {
   const { refName, remainingRef } = splitNextDocRef(ref);
 
-  const child = getOrCreateChild(fsDocument, createMockFirestoreDocument, { exists: Boolean(mock.data) }, refName);
+  const child = getOrCreateChild(fsDocument, createMockFirestoreDocument, { exists: Boolean(mockData) }, refName);
 
   if (remainingRef) {
-    return getDocument(child, createMockFirestoreDocument, remainingRef, mock.data);
+    return getDocument(child, createMockFirestoreDocument, remainingRef, mockData);
   }
 
-  if (mock.data) {
-    const duplicatedDocument = child.clone();
-    duplicatedDocument.documentData = mock.data;
+  if (mockData) {
+    const duplicatedDocument = cloneForSnapshot(child, createMockFirestoreDocument);
+    duplicatedDocument.documentData = mockData;
 
     return duplicatedDocument;
   }

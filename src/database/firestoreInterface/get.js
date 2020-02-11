@@ -1,17 +1,11 @@
-import cloneDeep from 'lodash/fp/cloneDeep';
 import {
   convertToDocumentSnap,
   convertToQuerySnap,
 } from '../../converters';
+import cloneForSnapshot from '../cloneForSnapshot';
 
 const get = (fsDocument, createMockFirestoreDocument) => async () => {
-  const snapClone = createMockFirestoreDocument(
-    fsDocument.id,
-    fsDocument.parent,
-    { isCollection: fsDocument.isCollection, exists: fsDocument.exists },
-  );
-  snapClone.documentData = fsDocument.documentData;
-  snapClone.snapData = cloneDeep(fsDocument.documentData);
+  const snapClone = cloneForSnapshot(fsDocument, createMockFirestoreDocument);
 
   const snap = fsDocument.isCollection
     ? convertToQuerySnap(snapClone)
