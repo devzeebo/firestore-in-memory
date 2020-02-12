@@ -1,5 +1,4 @@
 import mapValues from 'lodash/fp/mapValues';
-import invokeArgs from 'lodash/fp/invokeArgs';
 import assign from 'lodash/assign';
 
 import getAndConvertChild from '../getAndConvertChild';

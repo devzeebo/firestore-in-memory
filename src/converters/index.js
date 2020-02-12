@@ -1,6 +1,7 @@
 import identity from 'lodash/fp/identity';
 import constant from 'lodash/fp/constant';
-import assign from 'lodash/fp/assign';
+
+import assign from 'lodash/assign';
 
 import createConverterOfType from './createConverterOfType';
 

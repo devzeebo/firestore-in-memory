@@ -16,6 +16,7 @@ describe('clone for snapshot', () => {
       create_document_called_with_SAME_values_as_document,
       clone_DOCUMENT_DATA_is_ORIGINAL_DOCUMENT_DATA,
       clone_has_SNAP_DATA,
+      clone_has_ORIGINAL_CHILDREN,
       SNAP_DATA_is_CLONED,
     },
   });
@@ -27,6 +28,10 @@ function document() {
     exists: 'exists value',
     documentData: {
       data: 'value',
+    },
+    children: {
+      '123-abc': {},
+      '456-def': {},
     },
   };
 }
@@ -59,6 +64,9 @@ function clone_DOCUMENT_DATA_is_ORIGINAL_DOCUMENT_DATA() {
 }
 function clone_has_SNAP_DATA() {
   expect(this.result.snapData).not.toBeUndefined();
+}
+function clone_has_ORIGINAL_CHILDREN() {
+  expect(this.result.children).toBe(this.document.children);
 }
 function SNAP_DATA_is_CLONED() {
   expect(this.result.snapData).not.toBe(this.document.documentData);

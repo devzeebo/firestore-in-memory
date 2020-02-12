@@ -91,10 +91,10 @@ function mock_clone() {
 }
 
 function getting_document_WITHOUT_mock_data() {
-  this.result = getDocument(undefined, undefined, this.ref);
+  this.result = getDocument(undefined, undefined)(this.ref);
 }
 function getting_document_WITH_mock_data() {
-  this.result = getDocument(undefined, undefined, this.ref, { cat: 'meow' });
+  this.result = getDocument(undefined, undefined)(this.ref, { cat: 'meow' });
 }
 
 function child_is_returned() {

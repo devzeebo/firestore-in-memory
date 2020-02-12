@@ -8,21 +8,6 @@ describe('create converter of type', () => {
     test('undefined src cache key', {
       given: {
         UNDEFINED_root_cache_key,
-        ref,
-        cacheable_object_WITHOUT_path_prop,
-      },
-      when: {
-        calculating_cache_key_for_FIRST_object,
-      },
-      then: {
-        cache_key_DOES_NOT_include_UNDEFINED,
-      },
-    });
-
-    test('undefined ref', {
-      given: {
-        ROOT_cache_key,
-        UNDEFINED_ref,
         cacheable_object_WITHOUT_path_prop,
       },
       when: {
@@ -36,7 +21,6 @@ describe('create converter of type', () => {
     test('cacheable object WITHOUT path but SAME shape', {
       given: {
         ROOT_cache_key,
-        ref,
         cacheable_object_WITHOUT_path_prop,
         DIFFERENT_cacheable_object_WITHOUT_path_prop_but_SAME_shape,
       },
@@ -52,7 +36,6 @@ describe('create converter of type', () => {
     test('cacheable object WITHOUT path and DIFFERENT shape', {
       given: {
         ROOT_cache_key,
-        ref,
         cacheable_object_WITHOUT_path_prop,
         DIFFERENT_cacheable_object_WITHOUT_path_prop_and_DIFFERENT_shape,
       },
@@ -102,12 +85,6 @@ function ROOT_cache_key() {
 function UNDEFINED_root_cache_key() {
   this.src_cache_key = undefined;
 }
-function ref() {
-  this.ref = '456-def';
-}
-function UNDEFINED_ref() {
-  this.ref = undefined;
-}
 function cacheable_object_WITHOUT_path_prop() {
   this.first_cacheable_object = {
     cat: 'meow',
@@ -139,20 +116,18 @@ function NULL_cacheable_object() {
   this.first_cacheable_object = null;
 }
 function UNDEFINED_cacheable_object() {
-  this.second_cacheable_object = null;
+  this.second_cacheable_object = undefined;
 }
 
 function calculating_cache_key_for_FIRST_object() {
   this.first_cache_key = getCacheKey(
     this.ROOT_cache_key,
-    this.ref,
     this.first_cacheable_object,
   );
 }
 function calculating_cache_key_for_SECOND_object() {
   this.second_cache_key = getCacheKey(
     this.ROOT_cache_key,
-    this.ref,
     this.second_cacheable_object,
   );
 }

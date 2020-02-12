@@ -12,12 +12,13 @@ describe('create converter of type', () => {
     jest.resetModules();
   });
 
-  test('converter has isTypeConverter=true', {
+  test('converter func has converter props', {
     when: {
       creating_converter,
     },
     then: {
       converter_has_isTypeConverter_TRUE,
+      converter_type_is_set,
     },
   });
 
@@ -87,7 +88,9 @@ function RECURSIVE_type_converter() {
   converter_props.recurse = this.converter;
 }
 function creating_converter() {
-  this.converter = createConverterOfType();
+  this.converter = createConverterOfType({
+    __converterType: constant('converter'),
+  });
 }
 
 function converting_NIL_object() {
@@ -111,6 +114,9 @@ function converting_RECURSIVE_object() {
 
 function converter_has_isTypeConverter_TRUE() {
   expect(this.converter.isTypeConverter).toBe(true);
+}
+function converter_type_is_set() {
+  expect(this.converter.type()).toBe('converter');
 }
 function value_is_returned() {
   expect(this.result).toBe(null);

@@ -12,10 +12,9 @@ const cacheContext = {
   cache: null,
 };
 
-export const getCacheKey = (srcCacheKey, ref, value) => (
+export const getCacheKey = (srcCacheKey, value) => (
   join(':', [
     srcCacheKey,
-    ref,
     get('path')(value) || objectHash(value || null, { ignoreUnknown: true }),
   ])
 );
@@ -28,7 +27,7 @@ const createConverterOfType = (props) => {
 
     const cache = (cacheContext.cache || (cacheContext.cache = new Map()));
 
-    const srcCacheKey = getCacheKey(props.__converterType(), '', src);
+    const srcCacheKey = getCacheKey(props.__converterType(), src);
 
     if (cache.has(srcCacheKey)) {
       return cache.get(srcCacheKey);
@@ -40,17 +39,7 @@ const createConverterOfType = (props) => {
     cache.set(srcCacheKey, dst);
 
     forEachWithKey((convertFunc, key) => {
-      const cacheKey = getCacheKey(srcCacheKey, key, src[key]);
-
-      if (!cache.has(cacheKey)) {
-        if (convertFunc.isTypeConverter) {
-          cache.set(cacheKey, convertFunc(src[key], cache));
-        } else {
-          cache.set(cacheKey, convertFunc(src[key]));
-        }
-      }
-
-      dst[key] = cache.get(cacheKey);
+      dst[key] = convertFunc(src[key]);
     })(props);
 
     cacheContext.levels -= 1;
@@ -61,6 +50,7 @@ const createConverterOfType = (props) => {
 
     return dst;
   };
+  converter.type = () => props.__converterType();
   converter.isTypeConverter = true;
 
   return converter;

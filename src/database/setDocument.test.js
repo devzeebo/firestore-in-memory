@@ -83,7 +83,7 @@ function mock_children() {
     .mockImplementationOnce(() => this.nested_child);
 }
 function setting_document() {
-  setDocument(this.root, undefined, this.ref, this.data);
+  setDocument(this.root, undefined)(this.ref, this.data);
 }
 
 function CHILD_is_in_ROOT_children() {
