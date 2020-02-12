@@ -20,9 +20,14 @@ import set from './set';
 import update from './update';
 
 const augmentProps = (mockDocument) => {
-  Object.defineProperties(mockDocument, mapValues(invokeArgs([mockDocument]))(
-    [exists, size, empty, docs, ref],
-  ));
+  const bindToMockDocument = (it) => it(mockDocument);
+
+  Object.defineProperties(
+    mockDocument,
+    mapValues(bindToMockDocument)({
+      exists, size, empty, docs, ref,
+    }),
+  );
 };
 
 const augmentMethods = (mockDocument, createMockFirestoreDocument) => assign(mockDocument, {

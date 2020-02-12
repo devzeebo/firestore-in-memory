@@ -2,12 +2,12 @@ import identity from 'lodash/fp/identity';
 import constant from 'lodash/fp/constant';
 import assign from 'lodash/fp/assign';
 
-import convertToType from './convertToType';
+import createConverterOfType from './createConverterOfType';
 
-const CollectionRefProperties = {};
-const DocumentRefProperties = {};
-const QuerySnapProperties = {};
-const DocumentSnapProperties = {};
+export const CollectionRefProperties = {};
+export const DocumentRefProperties = {};
+export const QuerySnapProperties = {};
+export const DocumentSnapProperties = {};
 
 assign(CollectionRefProperties, {
   id: identity,
@@ -18,8 +18,7 @@ assign(CollectionRefProperties, {
   __exists: identity,
   __converterType: constant('collection ref'),
 });
-export const convertToCollectionRef = convertToType(CollectionRefProperties);
-convertToCollectionRef.isTypeConverter = true;
+export const convertToCollectionRef = createConverterOfType(CollectionRefProperties);
 
 assign(DocumentRefProperties, {
   id: identity,
@@ -31,8 +30,7 @@ assign(DocumentRefProperties, {
   __exists: identity,
   __converterType: constant('document ref'),
 });
-export const convertToDocumentRef = convertToType(DocumentRefProperties);
-convertToDocumentRef.isTypeConverter = true;
+export const convertToDocumentRef = createConverterOfType(DocumentRefProperties);
 
 assign(QuerySnapProperties, {
   docs: identity,
@@ -41,8 +39,7 @@ assign(QuerySnapProperties, {
   __exists: identity,
   __converterType: constant('query snap'),
 });
-export const convertToQuerySnap = convertToType(QuerySnapProperties);
-convertToQuerySnap.isTypeConverter = true;
+export const convertToQuerySnap = createConverterOfType(QuerySnapProperties);
 
 assign(DocumentSnapProperties, {
   id: identity,
@@ -52,8 +49,7 @@ assign(DocumentSnapProperties, {
   __exists: identity,
   __converterType: constant('document snap'),
 });
-export const convertToDocumentSnap = convertToType(DocumentSnapProperties);
-convertToDocumentSnap.isTypeConverter = true;
+export const convertToDocumentSnap = createConverterOfType(DocumentSnapProperties);
 
 DocumentRefProperties.parent = convertToCollectionRef;
 CollectionRefProperties.parent = convertToDocumentRef;

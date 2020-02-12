@@ -70,7 +70,7 @@ function mock_document() {
     },
     documentData: {
       cat: {
-        name: 'Maoser',
+        name: 'Maowser',
         sound: 'meow',
       },
     },
