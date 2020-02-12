@@ -58,6 +58,20 @@ describe('end to end tests', () => {
       snapshot_EXISTS,
     },
   });
+
+  test('snap data is frozen', {
+    given: {
+      mock_db,
+    },
+    when: {
+      setting_FIRST_LEVEL_document,
+      getting_FIRST_LEVEL_document,
+      modifying_FIRST_LEVEL_document_data,
+    },
+    then: {
+      snap_data_is_NOT_modified,
+    },
+  });
 });
 
 function mock_db() {
@@ -104,6 +118,11 @@ async function getting_snapshot_that_DOES_NOT_exist() {
   this.result_ref = this.mock_db.collection('col').doc('not-exists').collection('sub').doc('123-abc');
   this.result_snapshot = await this.result_ref.get();
 }
+function modifying_FIRST_LEVEL_document_data() {
+  this.mock_db.setDocument('col/123-abc', {
+    dog: 'woof',
+  });
+}
 
 function result_is_document_ref() {
   expect(this.result_ref.__converterType).toBe('document ref');
@@ -122,4 +141,9 @@ function snapshot_EXISTS() {
 }
 function snapshot_does_NOT_exist() {
   expect(this.result_snapshot.exists).toBe(false);
+}
+function snap_data_is_NOT_modified() {
+  expect(this.result_snapshot.data()).toEqual({
+    cat: 'meow',
+  });
 }

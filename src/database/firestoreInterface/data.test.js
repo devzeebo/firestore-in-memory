@@ -1,7 +1,7 @@
 /* eslint-disable camelcase,prefer-arrow-callback,func-names,no-use-before-define,no-param-reassign */
 import test from 'jest-gwt';
 
-import dataProp from './data';
+import dataFunc from './data';
 
 describe('firestore interface::data', () => {
   test('gets data from snap data', {
@@ -23,7 +23,8 @@ function mock_document() {
   };
 }
 function getting_data() {
-  this.result = dataProp(this.document).get();
+  const data = dataFunc(this.document);
+  this.result = data();
 }
 
 function document_snap_data_is_returned() {

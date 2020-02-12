@@ -14,6 +14,7 @@ import empty from './empty';
 import docs from './docs';
 import ref from './ref';
 
+import data from './data';
 import get from './get';
 import set from './set';
 import update from './update';
@@ -30,8 +31,9 @@ const augmentProps = (mockDocument) => {
 };
 
 const augmentMethods = (mockDocument, createMockFirestoreDocument) => assign(mockDocument, {
-  doc: getAndConvertChild(convertToDocumentRef, mockDocument, createMockFirestoreDocument),
   collection: getAndConvertChild(convertToCollectionRef, mockDocument, createMockFirestoreDocument),
+  data: data(mockDocument),
+  doc: getAndConvertChild(convertToDocumentRef, mockDocument, createMockFirestoreDocument),
   get: get(mockDocument, createMockFirestoreDocument),
   set: set(mockDocument),
   update: update(mockDocument),

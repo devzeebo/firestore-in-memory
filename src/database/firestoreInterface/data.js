@@ -1,5 +1,2 @@
-const get = (mockDocument) => () => mockDocument.snapData;
-
-export default (mockDocument) => ({
-  get: get(mockDocument),
-});
+const data = (mockDocument) => () => mockDocument.snapData;
+export default data;

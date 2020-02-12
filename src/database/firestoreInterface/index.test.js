@@ -42,19 +42,20 @@ function augmenting_with_firestore_interface() {
 function document_has_getter_props() {
   const getters = keys(Object.getOwnPropertyDescriptors(this.document));
   expect(getters).toEqual(expect.arrayContaining([
-    'exists',
-    'size',
-    'empty',
     'docs',
+    'empty',
+    'exists',
     'ref',
+    'size',
   ]));
 }
 
 function document_has_firestore_methods() {
   const methods = Object.getOwnPropertyNames(this.document);
   expect(methods).toEqual(expect.arrayContaining([
-    'doc',
     'collection',
+    'data',
+    'doc',
     'get',
     'set',
     'update',
