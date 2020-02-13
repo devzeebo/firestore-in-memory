@@ -11,7 +11,7 @@
     "build": "npm run babel",
     "babel": "babel src --out-dir dist/",
     "babel:watch": "npm run babel:dev -- --watch",
-    "prepublish": "npm run build && npm run test:coverage"
+    "prepublishonly": "npm run build && npm run test:coverage"
   },
   "repository": {
     "type": "git",
