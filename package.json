@@ -8,6 +8,7 @@
     "test:coverage": "npm run test -- --coverage",
     "lint": "eslint ./src",
     "lint:watch": "esw --watch --color ./src",
+    "build": "npm run babel",
     "babel": "babel src --out-dir dist/",
     "babel:watch": "npm run babel:dev -- --watch",
     "prepublish": "npm run build && npm run test:coverage"
