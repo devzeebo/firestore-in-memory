@@ -1,6 +1,6 @@
 {
   "name": "firestore-in-memory",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A drop-in, in-memory implementation of Firestore useful for testing",
   "main": "dist/index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "build": "rimraf dist && npm run babel",
     "babel": "babel src --out-dir dist/ --ignore \"**/*.test.js\"",
     "babel:watch": "npm run babel:dev -- --watch",
-    "prepublishonly": "npm run build && npm run test:coverage"
+    "prepublishOnly": "npm run build && npm run test:coverage"
   },
   "repository": {
     "type": "git",
