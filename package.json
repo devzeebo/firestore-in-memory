@@ -8,8 +8,8 @@
     "test:coverage": "npm run test -- --coverage",
     "lint": "eslint ./src",
     "lint:watch": "esw --watch --color ./src",
-    "build": "npm run babel",
-    "babel": "babel src --out-dir dist/",
+    "build": "rimraf dist && npm run babel",
+    "babel": "babel src --out-dir dist/ --ignore \"**/*.test.js\"",
     "babel:watch": "npm run babel:dev -- --watch",
     "prepublishonly": "npm run build && npm run test:coverage"
   },
@@ -42,7 +42,8 @@
     "eslint-plugin-lodash": "^6.0.0",
     "eslint-watch": "^6.0.1",
     "jest": "^24.9.0",
-    "jest-gwt": "^1.1.2"
+    "jest-gwt": "^1.1.2",
+    "rimraf": "^3.0.2"
   },
   "dependencies": {
     "core-js": "^3.4.2",
