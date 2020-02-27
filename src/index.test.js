@@ -79,11 +79,25 @@ describe('end to end tests', () => {
       document,
     },
     when: {
-      getting_existing_document,
       updating_document,
-      getting_existing_document_AGAIN,
     },
     then: {
+      snap_data_is_NOT_modified,
+      mock_db_has_UPDATED_data,
+      updated_snap_has_UPDATED_data,
+    },
+  });
+
+  test('transaction update operation', {
+    given: {
+      mock_db,
+      document,
+    },
+    when: {
+      updating_document_IN_TRANSACTION,
+    },
+    then: {
+      all_ops_in_transaction,
       snap_data_is_NOT_modified,
       mock_db_has_UPDATED_data,
       updated_snap_has_UPDATED_data,
@@ -143,14 +157,22 @@ function modifying_FIRST_LEVEL_document_data() {
     dog: 'woof',
   });
 }
-async function getting_existing_document() {
+async function updating_document() {
   this.result_ref = this.mock_db.collection('col').doc('123-abc');
   this.result_snapshot = await this.result_ref.get();
-}
-async function updating_document() {
+
   await this.result_ref.set({ dog: 'woof' });
+
+  this.updated_result_snapshot = await this.result_ref.get();
 }
-async function getting_existing_document_AGAIN() {
+async function updating_document_IN_TRANSACTION() {
+  await this.mock_db.runTransaction(async (trans) => {
+    this.result_ref = this.mock_db.collection('col').doc('123-abc');
+    this.result_snapshot = await trans.get(this.result_ref);
+
+    await trans.set(this.result_ref, { dog: 'woof' });
+  });
+
   this.updated_result_snapshot = await this.result_ref.get();
 }
 
@@ -186,4 +208,10 @@ function updated_snap_has_UPDATED_data() {
   expect(this.updated_result_snapshot.data()).toEqual({
     dog: 'woof',
   });
+}
+function all_ops_in_transaction() {
+  expect(this.mock_db.transaction.log).toEqual(expect.arrayContaining([
+    { op: 'get', path: 'col/123-abc' },
+    expect.objectContaining({ op: 'set', path: 'col/123-abc', data: { dog: 'woof' } }),
+  ]));
 }

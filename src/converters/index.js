@@ -15,6 +15,7 @@ assign(CollectionRefProperties, {
   // parent: toDocumentRef // defined below due to reference loop
   doc: identity,
   get: identity,
+  path: identity,
   where: identity,
   __exists: identity,
   __converterType: constant('collection ref'),
@@ -26,6 +27,7 @@ assign(DocumentRefProperties, {
   // parent: toCollectionRef // defined below due to reference loop
   get: identity,
   collection: identity,
+  path: identity,
   set: identity,
   update: identity,
   __exists: identity,

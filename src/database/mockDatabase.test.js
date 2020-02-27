@@ -80,6 +80,34 @@ describe('mock database', () => {
       ref_is_updated,
     },
   });
+
+  test('transaction does NOT allow get after set', {
+    given: {
+      mock_db,
+      mock_ref,
+    },
+    when: {
+      calling_transaction_SET,
+      calling_transaction_GET,
+    },
+    then: {
+      expect_error,
+    },
+  });
+
+  test('transaction does NOT allow get after update', {
+    given: {
+      mock_db,
+      mock_ref,
+    },
+    when: {
+      calling_transaction_UPDATE,
+      calling_transaction_GET,
+    },
+    then: {
+      expect_error,
+    },
+  });
 });
 
 function mock_firestore_document() {
@@ -187,4 +215,7 @@ function ref_is_updated() {
 }
 function transaction_function_is_executed_with_MOCK_TRANSACTION() {
   expect(this.transaction_function).toHaveBeenCalledWith(this.test_mock_db.transaction);
+}
+function expect_error(e) {
+  expect(e.message).toEqual('Cannot call get in a transaction after set or update');
 }

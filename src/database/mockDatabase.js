@@ -1,3 +1,4 @@
+import { every } from 'lodash/fp';
 import assign from 'lodash/assign';
 import createMockFirestoreDocument from './createMockFirestoreDocument';
 
@@ -11,6 +12,9 @@ const createMockDb = () => {
       mockDb.transaction = {
         log: [],
         async get(ref) {
+          if (!every({ op: 'get' })(mockDb.transaction.log)) {
+            throw new Error('Cannot call get in a transaction after set or update');
+          }
           mockDb.transaction.log.push({
             op: 'get', path: ref.path,
           });
