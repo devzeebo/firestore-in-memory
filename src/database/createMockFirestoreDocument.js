@@ -1,6 +1,6 @@
-import flow from 'lodash/fp/flow';
-import join from 'lodash/fp/join';
-import replace from 'lodash/fp/replace';
+import {
+  flow, join, replace, getOr,
+} from 'lodash/fp';
 
 import assign from 'lodash/assign';
 import augmentWithFirestoreInterface from './firestoreInterface';
@@ -23,6 +23,7 @@ const createMockFirestoreDocument = (id, parent, { isCollection, exists }) => {
   });
 
   assign(mockDocument, {
+    database: getOr(parent, 'database')(parent),
     getDocument: getDocument(mockDocument, createMockFirestoreDocument),
     setDocument: setDocument(mockDocument, createMockFirestoreDocument),
   });

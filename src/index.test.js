@@ -1,6 +1,6 @@
 /* eslint-disable camelcase,prefer-arrow-callback,func-names,no-use-before-define,no-param-reassign */
 import test from 'jest-gwt';
-import map from 'lodash/fp/map';
+import { map, get } from 'lodash/fp';
 
 import createMockDb from './database/index';
 
@@ -72,10 +72,30 @@ describe('end to end tests', () => {
       snap_data_is_NOT_modified,
     },
   });
+
+  test('generic update operation', {
+    given: {
+      mock_db,
+      document,
+    },
+    when: {
+      getting_existing_document,
+      updating_document,
+      getting_existing_document_AGAIN,
+    },
+    then: {
+      snap_data_is_NOT_modified,
+      mock_db_has_UPDATED_data,
+      updated_snap_has_UPDATED_data,
+    },
+  });
 });
 
 function mock_db() {
   this.mock_db = createMockDb();
+}
+function document() {
+  this.mock_db.setDocument('col/123-abc', { cat: 'meow' });
 }
 
 function setting_FIRST_LEVEL_document() {
@@ -123,6 +143,16 @@ function modifying_FIRST_LEVEL_document_data() {
     dog: 'woof',
   });
 }
+async function getting_existing_document() {
+  this.result_ref = this.mock_db.collection('col').doc('123-abc');
+  this.result_snapshot = await this.result_ref.get();
+}
+async function updating_document() {
+  await this.result_ref.set({ dog: 'woof' });
+}
+async function getting_existing_document_AGAIN() {
+  this.updated_result_snapshot = await this.result_ref.get();
+}
 
 function result_is_document_ref() {
   expect(this.result_ref.__converterType).toBe('document ref');
@@ -145,5 +175,15 @@ function snapshot_does_NOT_exist() {
 function snap_data_is_NOT_modified() {
   expect(this.result_snapshot.data()).toEqual({
     cat: 'meow',
+  });
+}
+function mock_db_has_UPDATED_data() {
+  expect(get('children.col.children.123-abc.documentData')(this.mock_db)).toEqual({
+    dog: 'woof',
+  });
+}
+function updated_snap_has_UPDATED_data() {
+  expect(this.updated_result_snapshot.data()).toEqual({
+    dog: 'woof',
   });
 }
