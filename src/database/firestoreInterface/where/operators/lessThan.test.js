@@ -1,0 +1,111 @@
+import test from 'jest-gwt';
+
+import lessThan from './lessThan';
+
+describe('where less than', () => {
+  test('number greater than returns FALSE', {
+    given: {
+      data_value_GREATER_THAN_query_value,
+    },
+    when: {
+      executing_filter,
+    },
+    then: {
+      FALSE_is_returned,
+    },
+  });
+
+  test('word greater than returns FALSE', {
+    given: {
+      word_data_value_GREATER_THAN_query_value,
+    },
+    when: {
+      executing_filter,
+    },
+    then: {
+      FALSE_is_returned,
+    },
+  });
+
+  test('number less than returns TRUE', {
+    given: {
+      data_value_LESS_THAN_query_value,
+    },
+    when: {
+      executing_filter,
+    },
+    then: {
+      TRUE_is_returned,
+    },
+  });
+
+  test('word less than returns TRUE', {
+    given: {
+      word_data_value_LESS_THAN_query_value,
+    },
+    when: {
+      executing_filter,
+    },
+    then: {
+      TRUE_is_returned,
+    },
+  });
+
+  test('number equal value returns FALSE', {
+    given: {
+      data_value_EQUAL_TO_query_value,
+    },
+    when: {
+      executing_filter,
+    },
+    then: {
+      FALSE_is_returned,
+    },
+  });
+
+  test('word equal value returns FALSE', {
+    given: {
+      word_data_value_EQUAL_TO_query_value,
+    },
+    when: {
+      executing_filter,
+    },
+    then: {
+      FALSE_is_returned,
+    },
+  });
+});
+
+function data_value_GREATER_THAN_query_value() {
+  this.func = lessThan(5);
+  this.data_value = 10;
+}
+function data_value_LESS_THAN_query_value() {
+  this.func = lessThan(10);
+  this.data_value = 5;
+}
+function data_value_EQUAL_TO_query_value() {
+  this.func = lessThan(10);
+  this.data_value = 10;
+}
+function word_data_value_GREATER_THAN_query_value() {
+  this.func = lessThan('cat');
+  this.data_value = 'dog';
+}
+function word_data_value_LESS_THAN_query_value() {
+  this.func = lessThan('dog');
+  this.data_value = 'cat';
+}
+function word_data_value_EQUAL_TO_query_value() {
+  this.func = lessThan('dog');
+  this.data_value = 'dog';
+}
+function executing_filter() {
+  this.result = this.func(this.data_value);
+}
+function TRUE_is_returned() {
+  expect(this.result).toBe(true);
+}
+function FALSE_is_returned() {
+  expect(this.result).toBe(false);
+}
