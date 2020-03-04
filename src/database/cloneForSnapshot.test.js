@@ -1,5 +1,6 @@
 /* eslint-disable camelcase,prefer-arrow-callback,func-names,no-use-before-define,no-param-reassign */
 import test from 'jest-gwt';
+import { map } from 'lodash/fp';
 
 import cloneForSnapshot from './cloneForSnapshot';
 
@@ -37,14 +38,16 @@ function document() {
 }
 
 function mock_create_document() {
+  this.created_docs = [];
   this.create_mock_document = jest.fn((id, parent, args) => {
-    this.created_doc = {
+    const created_doc = {
       id,
       parent,
       args,
     };
+    this.created_docs.push(created_doc);
 
-    return this.created_doc;
+    return created_doc;
   });
 }
 
@@ -53,10 +56,10 @@ function cloning_document() {
 }
 
 function create_document_called_with_SAME_values_as_document() {
-  expect(this.created_doc).not.toBeUndefined();
-  expect(this.created_doc.args).not.toBeUndefined();
-  expect(this.created_doc.args.isCollection).toBe('collection value');
-  expect(this.created_doc.args.exists).toBe('exists value');
+  expect(this.created_docs[0]).not.toBeUndefined();
+  expect(this.created_docs[0].args).not.toBeUndefined();
+  expect(this.created_docs[0].args.isCollection).toBe('collection value');
+  expect(this.created_docs[0].args.exists).toBe('exists value');
 }
 function clone_DOCUMENT_DATA_is_ORIGINAL_DOCUMENT_DATA() {
   expect(this.result.documentData).not.toBeUndefined();
@@ -66,7 +69,7 @@ function clone_has_SNAP_DATA() {
   expect(this.result.snapData).not.toBeUndefined();
 }
 function clone_has_ORIGINAL_CHILDREN() {
-  expect(this.result.children).toBe(this.document.children);
+  expect(this.result.children).toEqual(expect.arrayContaining(map(expect.objectContaining)(this.document.children)));
 }
 function SNAP_DATA_is_CLONED() {
   expect(this.result.snapData).not.toBe(this.document.documentData);

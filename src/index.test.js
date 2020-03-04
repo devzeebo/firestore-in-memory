@@ -1,6 +1,8 @@
 /* eslint-disable camelcase,prefer-arrow-callback,func-names,no-use-before-define,no-param-reassign */
 import test from 'jest-gwt';
-import { map, get } from 'lodash/fp';
+import {
+  flow, map, get, invoke,
+} from 'lodash/fp';
 
 import createMockDb from './database/index';
 
@@ -56,6 +58,20 @@ describe('end to end tests', () => {
     then: {
       result_is_document_ref,
       snapshot_EXISTS,
+    },
+  });
+
+  test('query snap has data', {
+    given: {
+      mock_db,
+    },
+    when: {
+      creating_document_WITH_CHILDREN,
+      getting_document_WITH_CHILDREN,
+      getting_ALL_CHILDREN,
+    },
+    then: {
+      children_have_data,
     },
   });
 
@@ -214,4 +230,23 @@ function all_ops_in_transaction() {
     { op: 'get', path: 'col/123-abc' },
     expect.objectContaining({ op: 'set', path: 'col/123-abc', data: { dog: 'woof' } }),
   ]));
+}
+function creating_document_WITH_CHILDREN() {
+  this.mock_db.setDocument('col/doc/subcol/foo', { test: 'it' });
+  this.mock_db.setDocument('col/doc/subcol/bar', { test: 'it' });
+}
+async function getting_document_WITH_CHILDREN() {
+  this.result_ref = this.mock_db.collection('col').doc('doc');
+}
+async function getting_ALL_CHILDREN() {
+  this.children_snaps = await this.result_ref.collection('subcol').get();
+}
+function children_have_data() {
+  expect(flow(
+    get('docs[0]'),
+    invoke('data'),
+  )(this.children_snaps))
+    .toEqual({
+      test: 'it',
+    });
 }
