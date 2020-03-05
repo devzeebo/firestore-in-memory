@@ -1,6 +1,6 @@
 {
   "name": "firestore-in-memory",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "A drop-in, in-memory implementation of Firestore useful for testing",
   "main": "dist/index.js",
   "scripts": {
