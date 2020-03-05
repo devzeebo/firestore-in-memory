@@ -1,6 +1,6 @@
 /* eslint-disable camelcase,prefer-arrow-callback,func-names,no-use-before-define,no-param-reassign */
 import test from 'jest-gwt';
-import { map } from 'lodash/fp';
+import { mapValues } from 'lodash/fp';
 
 import cloneForSnapshot from './cloneForSnapshot';
 
@@ -17,7 +17,7 @@ describe('clone for snapshot', () => {
       create_document_called_with_SAME_values_as_document,
       clone_DOCUMENT_DATA_is_ORIGINAL_DOCUMENT_DATA,
       clone_has_SNAP_DATA,
-      clone_has_ORIGINAL_CHILDREN,
+      clone_has_SNAPSHOT_CLONED_CHILDREN,
       SNAP_DATA_is_CLONED,
     },
   });
@@ -68,8 +68,8 @@ function clone_DOCUMENT_DATA_is_ORIGINAL_DOCUMENT_DATA() {
 function clone_has_SNAP_DATA() {
   expect(this.result.snapData).not.toBeUndefined();
 }
-function clone_has_ORIGINAL_CHILDREN() {
-  expect(this.result.children).toEqual(expect.arrayContaining(map(expect.objectContaining)(this.document.children)));
+function clone_has_SNAPSHOT_CLONED_CHILDREN() {
+  expect(this.result.children).toEqual(expect.objectContaining(mapValues(expect.objectContaining)(this.document.children)));
 }
 function SNAP_DATA_is_CLONED() {
   expect(this.result.snapData).not.toBe(this.document.documentData);
