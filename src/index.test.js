@@ -1,7 +1,11 @@
 /* eslint-disable camelcase,prefer-arrow-callback,func-names,no-use-before-define,no-param-reassign */
 import test from 'jest-gwt';
 import {
-  flow, map, get, invoke,
+  flow,
+  map,
+  get,
+  invoke,
+  size,
 } from 'lodash/fp';
 
 import createMockDb from './database/index';
@@ -119,6 +123,20 @@ describe('end to end tests', () => {
       updated_snap_has_UPDATED_data,
     },
   });
+
+  test('single where', {
+    given: {
+      mock_db,
+    },
+    when: {
+      setting_MULTIPLE_documents,
+      filtering_collection,
+    },
+    then: {
+      result_is_QUERY_snap,
+      docs_are_filtered,
+    },
+  });
 });
 
 function mock_db() {
@@ -144,6 +162,10 @@ function setting_MULTIPLE_documents() {
   this.mock_db.setDocument('col/456-def', {
     dog: 'woof',
   });
+}
+async function filtering_collection() {
+  this.result_snapshot = await this.mock_db.collection('col').where('dog', '==', 'woof').get();
+  this.children_snaps = this.result_snapshot.docs;
 }
 function setting_DEEP_document() {
   this.mock_db.setDocument('col/123-abc/nested/456-def/subcollection/789-ghi', {
@@ -249,4 +271,10 @@ function children_have_data() {
     .toEqual({
       test: 'it',
     });
+}
+function docs_are_filtered() {
+  expect(size(this.children_snaps)).toBe(1);
+  expect(this.children_snaps[0].data()).toEqual({
+    dog: 'woof',
+  });
 }
