@@ -9,6 +9,7 @@ export const CollectionRefProperties = {};
 export const DocumentRefProperties = {};
 export const QuerySnapProperties = {};
 export const DocumentSnapProperties = {};
+export const QueryProperties = {};
 
 assign(CollectionRefProperties, {
   id: identity,
@@ -53,6 +54,13 @@ assign(DocumentSnapProperties, {
   __converterType: constant('document snap'),
 });
 export const convertToDocumentSnap = createConverterOfType(DocumentSnapProperties);
+
+assign(QueryProperties, {
+  where: identity,
+  get: identity,
+  __converterType: constant('query'),
+});
+export const convertToQuery = createConverterOfType(QueryProperties);
 
 DocumentRefProperties.parent = convertToCollectionRef;
 CollectionRefProperties.parent = convertToDocumentRef;

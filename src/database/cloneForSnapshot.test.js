@@ -1,6 +1,12 @@
 /* eslint-disable camelcase,prefer-arrow-callback,func-names,no-use-before-define,no-param-reassign */
 import test from 'jest-gwt';
-import { mapValues } from 'lodash/fp';
+import {
+  mapValues,
+  pickBy,
+  flow,
+  get,
+  isEqual,
+} from 'lodash/fp';
 
 import cloneForSnapshot from './cloneForSnapshot';
 
@@ -21,6 +27,19 @@ describe('clone for snapshot', () => {
       SNAP_DATA_is_CLONED,
     },
   });
+
+  test('executes filters', {
+    given: {
+      document_with_FILTERS,
+      mock_create_document,
+    },
+    when: {
+      cloning_document,
+    },
+    then: {
+      clone_children_is_FILTERED,
+    },
+  });
 });
 
 function document() {
@@ -34,6 +53,27 @@ function document() {
       '123-abc': {},
       '456-def': {},
     },
+  };
+}
+function document_with_FILTERS() {
+  this.document = {
+    isCollection: 'collection value',
+    exists: 'exists value',
+    documentData: {
+      data: 'value',
+    },
+    children: {
+      '123-abc': { documentData: { animal: 'cat' } },
+      '456-def': { documentData: { animal: 'dog' } },
+    },
+    filters: [
+      pickBy(
+        flow(
+          get('documentData.animal'),
+          isEqual('dog'),
+        ),
+      ),
+    ],
   };
 }
 
@@ -69,9 +109,20 @@ function clone_has_SNAP_DATA() {
   expect(this.result.snapData).not.toBeUndefined();
 }
 function clone_has_SNAPSHOT_CLONED_CHILDREN() {
-  expect(this.result.children).toEqual(expect.objectContaining(mapValues(expect.objectContaining)(this.document.children)));
+  expect(this.result.children)
+    .toEqual(expect.objectContaining(mapValues(expect.objectContaining)(this.document.children)));
 }
 function SNAP_DATA_is_CLONED() {
   expect(this.result.snapData).not.toBe(this.document.documentData);
   expect(this.result.snapData).toEqual(this.document.documentData);
+}
+function clone_children_is_FILTERED() {
+  expect(this.result.children)
+    .toEqual({
+      '456-def': expect.objectContaining({
+        snapData: {
+          animal: 'dog',
+        },
+      }),
+    });
 }

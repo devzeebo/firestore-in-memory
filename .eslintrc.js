@@ -1,3 +1,5 @@
+const testFilesGlob = ['**/*.test.*.js', '**/*.test.js', '**/__mocks__/**/*.js'];
+
 module.exports = {
   root: true,
   extends: ['airbnb/base', 'plugin:lodash/recommended', 'plugin:import/errors', 'plugin:import/warnings'],
@@ -6,6 +8,15 @@ module.exports = {
     node: true,
     jest: true,
   },
+  overrides: [{
+    files: testFilesGlob,
+    rules: {
+      camelcase: ['off'],
+      'prefer-arrow-callback': ['off'],
+      'func-names': ['off'],
+      'no-use-before-define': ['off'],
+    },
+  }],
   rules: {
     'import/default': ['error'],
     'import/named': ['error'],

@@ -18,6 +18,7 @@ import data from './data';
 import get from './get';
 import set from './set';
 import update from './update';
+import where from './where/where';
 
 const augmentProps = (mockDocument) => {
   const bindToMockDocument = (it) => it(mockDocument);
@@ -37,6 +38,7 @@ const augmentMethods = (mockDocument, createMockFirestoreDocument) => assign(moc
   get: get(mockDocument, createMockFirestoreDocument),
   set: set(mockDocument),
   update: update(mockDocument),
+  where: where(mockDocument, createMockFirestoreDocument),
 });
 
 export default (mockDocument, createMockFirestoreDocument) => {
