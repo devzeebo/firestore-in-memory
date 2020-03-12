@@ -1,4 +1,4 @@
-import { flow, cloneDeep } from 'lodash/fp';
+import { mapValues, flow, cloneDeep } from 'lodash/fp';
 
 const cloneForSnapshot = (fsDocument, createMockFirestoreDocument) => {
   const snapClone = createMockFirestoreDocument(
@@ -7,13 +7,13 @@ const cloneForSnapshot = (fsDocument, createMockFirestoreDocument) => {
     { isCollection: fsDocument.isCollection, exists: fsDocument.exists },
   );
 
+  snapClone.children = mapValues((child) => cloneForSnapshot(child, createMockFirestoreDocument))(fsDocument.children);
   if (fsDocument.filters) {
     snapClone.children = flow(
       ...fsDocument.filters,
     )(snapClone.children);
   }
 
-  snapClone.children = fsDocument.children;
   snapClone.documentData = fsDocument.documentData;
   snapClone.snapData = cloneDeep(fsDocument.documentData);
 
