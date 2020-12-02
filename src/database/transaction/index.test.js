@@ -45,6 +45,22 @@ describe('transaction', () => {
     },
   });
 
+  test('multiple sets', {
+    given: {
+      transaction,
+      mock_ref,
+    },
+    when: {
+      SETTING_ref,
+      UPDATING_ref,
+      committing_transaction,
+    },
+    then: {
+      log_has_SET,
+      log_has_UPDATE,
+    },
+  });
+
   test('transaction does NOT allow get after set', {
     given: {
       transaction,
