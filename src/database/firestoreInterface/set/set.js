@@ -1,8 +1,8 @@
-import mergeAll from 'lodash/fp/mergeAll';
+import firestoreMerge from './_firestoreMerge';
 
 const set = (fsDocument) => async (data, opts = { merge: false }) => {
   fsDocument.database.setDocument(fsDocument.path, opts.merge
-    ? mergeAll([fsDocument.documentData, data])
+    ? firestoreMerge(fsDocument.documentData, data)
     : data);
 
   return Promise.resolve();
