@@ -33,9 +33,9 @@ module.exports = {
     ],
     'no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
     'no-return-assign': ['error', 'except-parens'],
-    'radix': 'off',
+    radix: 'off',
     'class-methods-use-this': 'off',
     'no-mixed-operators': 'off',
     'no-underscore-dangle': 'off',
-  }
+  },
 };
